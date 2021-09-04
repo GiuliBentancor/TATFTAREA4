@@ -19,6 +19,8 @@ public class WikipediaTest {
 		driver = new ChromeDriver();
 		driver.get("https://es.wikipedia.org");
 		driver.manage().window().maximize();	
+		String wikiTitulo = driver.getTitle();
+		assertTrue(wikiTitulo.contains("Wikipedia, la enciclopedia libre"));
 	}
 	
 	@After
@@ -27,15 +29,9 @@ public class WikipediaTest {
 	}
 
 	
-	public void funcionInicio(){
-		String wikiTitulo = driver.getTitle();
-		assertTrue(wikiTitulo.contains("Wikipedia, la enciclopedia libre"));
-	}
-	
 	@Test
 	public void testBusqueda() {
-		
-		funcionInicio();
+	
 		WebElement searchbox = driver.findElement(By.name("search"));
 		searchbox.click();
 		searchbox.sendKeys("Hola Mundo");

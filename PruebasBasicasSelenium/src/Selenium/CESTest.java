@@ -12,55 +12,60 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 public class CESTest {
 	static WebDriver driver;
-	String user = "agregarUsuario";
-	String password = "agregarContraseña";
-	String userName = "agregarNombreUsuario";
+	String user;
+	String password;
+	String userName;
 
 	@Before
 	public void setUp() throws Exception {
 		System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.get("https://capacitacion.ces.com.uy");
-		driver.manage().window().maximize();	
+		driver.manage().window().maximize();
+		String cesTitulo = driver.getTitle();
+		assertTrue(cesTitulo.contains("CES - AULA VIRTUAL"));
 	}
 	
 	@After
 	public void tearDownAfterClass() throws Exception {
 		driver.quit();
 	}
+
 	
-	public void funcionInicio(){
-		String cesTitulo = driver.getTitle();
-		assertTrue(cesTitulo.contains("CES - AULA VIRTUAL"));
+	public void funcionSetUser(){
+		user = "agregarUsuario";
+		password = "agregarPassword";
+		userName= "agregarUserName";
 	}
 	
-	public void funcionLogin() {
+	public void funcionLogin (String usuario, String contrasenia, String nombreUsuario) {
 		driver.findElement(By.linkText("Acceder")).click();
 		
 		WebElement userbox = driver.findElement(By.name("username"));
 		userbox.click();
-		userbox.sendKeys(user);
+		userbox.sendKeys(usuario);
 		
 		WebElement passwordbox = driver.findElement(By.name("password"));
 		passwordbox.click();
-		passwordbox.sendKeys(password);
+		passwordbox.sendKeys(contrasenia);
 		passwordbox.submit();
 		
 		WebElement name = driver.findElement(By.className("userbutton"));
-		assertTrue(name.getText().contains(userName));
+		assertTrue(name.getText().contains(nombreUsuario));
 	}
 	
 
 	@Test
 	public void testBusquedaBienvenidaTaller() {
-		funcionInicio();
-		funcionLogin();
+		
+		funcionSetUser();
+		funcionLogin(user, password, userName);
 		
 		driver.findElement(By.linkText("TALLER DE AUTOMATIZACIÓN DEL TESTING FUNCIONAL 202108")).click();
 		String tallerTitulo = driver.getTitle();
 		assertTrue(tallerTitulo.contains("Curso: TALLER DE AUTOMATIZACIÓN DEL TESTING FUNCIONAL 202108"));
 		
-		driver.findElement(By.xpath("//li[@id=\"module-24961\"]//a")).click();
+		driver.findElement(By.xpath("//*[@id=\"module-24961\"]//a")).click();
 		String novedadesTitulo = driver.getTitle();
 		assertTrue(novedadesTitulo.contains("Novedades del taller"));
 		

@@ -12,6 +12,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 public class GoogleTest {
 	static WebDriver driver;
+	String textoBusqueda = "CES";
 	
 	@Before
 	public void setUp() throws Exception {
@@ -19,6 +20,9 @@ public class GoogleTest {
 		driver = new ChromeDriver();
 		driver.get("https://www.google.com");
 		driver.manage().window().maximize();	
+		
+		String googleTitulo = driver.getTitle();
+		assertTrue(googleTitulo.contains("Google"));
 	}
 	
 	@After
@@ -26,22 +30,16 @@ public class GoogleTest {
 		driver.quit();
 	}
 	
-	public void funcionInicio(){
-		String googleTitulo = driver.getTitle();
-		assertTrue(googleTitulo.contains("Google"));
-	}
-
 
 	@Test
 	public void testBusqueda() {
-	
-		funcionInicio();
+		
 		WebElement searchbox = driver.findElement(By.name("q"));
 		searchbox.click();
-		searchbox.sendKeys("CES");
+		searchbox.sendKeys(textoBusqueda);
 		searchbox.submit();
 		
-		assertTrue(driver.getTitle().contains("CES - Buscar con Google"));
+		assertTrue(driver.getTitle().contains(textoBusqueda + " - Buscar con Google"));
 	}
 
 }
